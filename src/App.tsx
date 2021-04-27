@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, FormEvent } from "react";
 
 import ImcTableView from "./views/ImcTableView";
 import ImcView from "./views/ImcView";
@@ -11,20 +11,15 @@ function App() {
     const [controller] = useState(new ImcController());
     const [person, setPerson] = useState(new Person(0.0, 0.0));
 
-    const calculateImc = async () => {
-        const heightElem: HTMLInputElement | null = document.querySelector(
-            "#altura"
-        );
-        const weightElem: HTMLInputElement | null = document.querySelector(
-            "#peso"
-        );
+    const heightElem = useRef<HTMLInputElement>(null);
+    const weightElem = useRef<HTMLInputElement>(null);
 
-        if (!heightElem) throw Error("height is required field!");
-        if (!weightElem) throw Error("weight is required field!");
+    const calculateImc = async (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
 
         var newPerson = new Person(
-            parseFloat(heightElem?.value),
-            parseFloat(weightElem?.value)
+            parseFloat(heightElem?.current?.value ?? "0.0"),
+            parseFloat(weightElem?.current?.value ?? "0.0")
         );
 
         const personCalculated = await controller.calculate(
@@ -41,21 +36,22 @@ function App() {
                         <ImcTableView />
                     </div>
                     <hr />
-                    <div className="row">
-                        <label>Altura</label>
-                        <input id="altura" placeholder="0.00" />
-                    </div>
-                    <div className="row">
-                        <label>Peso</label>
-                        <input id="peso" placeholder="0.00" />
-                    </div>
-                    <button
-                        type="button"
-                        onClick={calculateImc}
-                        className="action"
-                    >
-                        Calcular
-                    </button>
+                    <form onSubmit={calculateImc}>
+                        <div className="row">
+                            <label>Altura</label>
+                            <input id="altura" ref={heightElem} placeholder="0.00" />
+                        </div>
+                        <div className="row">
+                            <label>Peso</label>
+                            <input id="peso" ref={weightElem} placeholder="0.00" />
+                        </div>
+                        <button
+                            type="submit"
+                            className="action"
+                        >
+                            Calcular
+                        </button>
+                    </form>
                 </div>
             </div>
             <hr />
