@@ -28,7 +28,7 @@ export default class ImcDriver {
 
     getTable() {
         return this
-          .getProxy('http://localhost:8080', '/imc/oauth/table')
+          .getProxy('http://localhost:8080', '/imc/table')
           .then((rawResponse :Response) => {
             return rawResponse.json();
           });
@@ -40,7 +40,7 @@ export default class ImcDriver {
        */
       async calculate(person :Person) {
         const response = await this.xhr
-          .post('http://localhost:8080', '/imc/oauth/calculate', person);
+          .post('http://localhost:8080', '/imc/calculate', person);
     
         return await response.json();
       }
