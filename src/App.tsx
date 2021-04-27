@@ -1,4 +1,4 @@
-import { useState, useRef, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
 import ImcTableView from "./views/ImcTableView";
 import ImcView from "./views/ImcView";
@@ -11,20 +11,15 @@ function App() {
     const [controller] = useState(new ImcController());
     const [person, setPerson] = useState(new Person(0.0, 0.0));
 
-    const heightElem = useRef<HTMLInputElement>(null);
-    const weightElem = useRef<HTMLInputElement>(null);
+    const [height, setHeight] = useState<string>("0.00");
+    const [weight, setWeight] = useState<string>("0.00");
 
     const calculateImc = async (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        var newPerson = new Person(
-            parseFloat(heightElem?.current?.value ?? "0.0"),
-            parseFloat(weightElem?.current?.value ?? "0.0")
-        );
+        var newPerson = new Person(parseFloat(height), parseFloat(weight));
 
-        const personCalculated = await controller.calculate(
-            newPerson.toObject()
-        );
+        const personCalculated = await controller.calculate(newPerson.toObject());
         setPerson(personCalculated);
     };
 
@@ -39,11 +34,11 @@ function App() {
                     <form onSubmit={calculateImc}>
                         <div className="row">
                             <label>Altura</label>
-                            <input id="altura" ref={heightElem} placeholder="0.00" />
+                            <input id="altura" placeholder="0.00" type="number" value={height} onChange={e => setHeight(e.target.value)} />
                         </div>
                         <div className="row">
                             <label>Peso</label>
-                            <input id="peso" ref={weightElem} placeholder="0.00" />
+                            <input id="peso" placeholder="0.00" type="number" value={weight} onChange={e => setWeight(e.target.value)} />
                         </div>
                         <button
                             type="submit"
