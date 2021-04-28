@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { PersonContext } from './contexts/PersonContextProvider';
 
 import ImcTableView from "./views/ImcTableView";
 import ImcView from "./views/ImcView";
@@ -10,13 +12,12 @@ import "./App.css";
 
 function App() {
     const [controller] = useState(new ImcController());
-    const [person, setPerson] = useState(new Person(0.0, 0.0));
+    const { setPerson } = useContext(PersonContext);
 
     const calculateImc = async (height: number, weight: number) => {
-        var newPerson = new Person(height, weight);
-
-        const personCalculated = await controller.calculate(newPerson.toObject());
-        setPerson(personCalculated);
+        let person = new Person(height, weight);
+        person = await controller.calculate(person.toObject());
+        setPerson(person);
     };
 
     return (
@@ -27,11 +28,11 @@ function App() {
                         <ImcTableView />
                     </div>
                     <hr />
-                    <ImcForm onSubmitCallback={calculateImc} person={person} />
+                    <ImcForm onSubmitCallback={calculateImc} />
                 </div>
             </div>
             <hr />
-            <ImcView className="data" person={person} />
+            <ImcView className="data" />
         </div>
     );
 }

@@ -1,16 +1,15 @@
-import { FormEvent } from "react";
+import { useContext, FormEvent } from "react";
+import { PersonContext } from '../contexts/PersonContextProvider';
 import { useInput } from "../hooks/useInput.hook";
-
-import Person from "../models/Person";
 
 export interface ImcFormProps {
     onSubmitCallback: (height: number, weight: number) => Promise<void>;
-    person: Person;
 }
 
 export default function ImcForm(props: ImcFormProps) {
 
-    const { onSubmitCallback, person } = props;
+    const { person } = useContext(PersonContext);
+    const { onSubmitCallback } = props;
 
     const [height, heightProps, resetHeight] = useInput("0.00");
     const [weight, weightProps, resetWeight] = useInput("0.00");
@@ -50,9 +49,9 @@ export default function ImcForm(props: ImcFormProps) {
             
             <hr />
 
-            <label><strong>Altura:</strong> {person.height}</label>
+            <label><strong>Altura:</strong> {person?.height}</label>
             <br />
-            <label><strong>Peso:</strong> {person.weight}</label>
+            <label><strong>Peso:</strong> {person?.weight}</label>
         </form>
     );
 }
