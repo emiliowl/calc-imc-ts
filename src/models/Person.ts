@@ -18,6 +18,10 @@ export default class Person {
         };
     }
 
+    copy(data: Person): Person {
+        return Object.assign(Object.create({}), this, data);
+    }
+
     get height() {
         return this._height;
     }

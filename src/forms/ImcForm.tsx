@@ -1,5 +1,5 @@
-import { useContext, FormEvent } from "react";
-import { PersonContext } from '../contexts/PersonContextProvider';
+import { FormEvent } from "react";
+import { usePerson } from "../hooks/usePerson.hook";
 import { useInput } from "../hooks/useInput.hook";
 
 export interface ImcFormProps {
@@ -8,7 +8,7 @@ export interface ImcFormProps {
 
 export default function ImcForm(props: ImcFormProps) {
 
-    const { person } = useContext(PersonContext);
+    const [person] = usePerson();
     const { onSubmitCallback } = props;
 
     const [height, heightProps, resetHeight] = useInput("0.00");

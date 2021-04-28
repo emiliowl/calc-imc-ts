@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { PersonContext } from './contexts/PersonContextProvider';
+import { usePerson } from './hooks/usePerson.hook';
 
 import ImcTableView from "./views/ImcTableView";
 import ImcView from "./views/ImcView";
@@ -12,7 +12,7 @@ import "./App.css";
 
 function App() {
     const [controller] = useState(new ImcController());
-    const { setPerson } = useContext(PersonContext);
+    const [,setPerson] = usePerson();
 
     const calculateImc = async (height: number, weight: number) => {
         let person = new Person(height, weight);
